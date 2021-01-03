@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> Title </title>
+    <style>
+        .active {
+            background-color: aquamarine;
+        }
+        
+        input,
+        select {
+            height: 40px;
+            font-size: 20px;
+        }
+        
+        button {
+            padding: 5px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="projList"> <span>Active Projects : </span>
+        <select id="projects"> </select>
+    </div>
+    <form id="myForm">
+        <div id="output">
+            <h2></h2>
+            <div>
+                <input type="date" name="duedate"> </div>
+            <div>
+                <input type="number" name="lessons"> </div>
+            <div>
+                <select name="rType" id="rType">
+                    <option value="course">course</option>
+                    <option value="ebook">ebook</option>
+                    <option value="learning object">learning object</option>
+                </select>
+            </div>
+            <div>
+                <select name="status" id="status">
+                    <option value="Active">Active</option>
+                    <option value="New">New</option>
+                    <option value="Done">Done</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="container">
+        <button type="button" class="btn prevProjectData">Prev</button>
+        <button type="button" class="btn updateProjectData">Save Project</button>
+        <button type="button" class="btn nextProjectData">Next</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="data.js"></script>
+    <script>
+        var str = '{"projects":[{"name":"Learn jQuery","status":"New","due":"2020-10-05","output":"course","lessons":200,"active":true},{"name":"Learn JavaScript","status":"Active","due":"2020-06-05","output":"course","lessons":100,"active":true},{"name":"Learn HTML","status":"Done","due":"2019-06-05","output":"course","lessons":50,"active":true}]}';
+        var obj = $.parseJSON(str);
+        
+        localStorage.setItem("foo",str);
+        console.log(localStorage.getItem("foo"));
+        var myobj2 = localStorage.getItem("foo");
+        var myobj3 = $.parseJSON(myobj2);
+        console.log("****");
+        console.log(myobj3);
+        
+        console.log(obj.projects);
+        $(document).ready(function () {
+            projectDetails();
+            buildHTML();
+            var myObjString = JSON.stringify(myData);
+            console.log(myObjString);
+        });
+        $("#projects").change(function () {
+            projectDetails();
+        });
+        $(".prevProjectData").click(function () {
+            $("#projects option:selected").prop("selected", false).prev().prop("selected", true);
+            projectDetails();
+        });
+        $(".nextProjectData").click(function () {
+            $("#projects option:selected").prop("selected", false).next().prop("selected", true);
+            projectDetails();
+        });
+
+        function buildHTML() {
+            console.log("BUIDLING...");
+            $select = $('<select/>');
+            $.each(myData.projects, function (index, val) {
+                console.log(val.active);
+                if (val.active) {
+                    var $option = $("<option/>");
+                    $option.attr({
+                        'value': index
+                    }).text(val.name);
+                    $("#projects").append($option);
+                }
+            })
+            console.log($select);
+        }
+
+        function projectDetails() {
+            //$(".prevProjectData").prop("disabled", true);
+            //$(".nextProjectData").prop("disabled", true);
+            $("#projects option:first").prop("selected") ? $(".prevProjectData").prop("disabled", true) : $(".prevProjectData").prop("disabled", false);
+            $("#projects option:last").prop("selected") ? $(".nextProjectData").prop("disabled", true) : $(".nextProjectData").prop("disabled", false);
+            if ($("#projects").val()) {
+                loadmyProject($("#projects").val());
+            }
+        }
+
+        function loadmyProject(val) {
+            var sel = myData.projects[val];
+            console.log(sel);
+            $("h2").text(sel.name);
+            $("input[name=lessons]").val(sel.lessons);
+            $("input[name=duedate]").val(sel.due);
+            if (sel.active) {
+                $("#output").addClass("active");
+            }
+        }
+    </script>
+</body>
+
+</html>

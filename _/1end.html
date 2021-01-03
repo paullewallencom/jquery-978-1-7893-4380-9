@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> Title </title>
+    <style>
+        .active {
+            background-color: aquamarine;
+        }
+        
+        input,
+        select {
+            height: 40px;
+            font-size: 20px;
+        }
+        
+        button {
+            padding: 5px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="projList"> <span>Active Projects : </span>
+        <select id="projects"> </select>
+    </div>
+    <form id="myForm">
+        <div id="output">
+            <h2></h2>
+            <div>
+                <input type="date" name="duedate"> </div>
+            <div>
+                <input type="number" name="lessons"> </div>
+            <div>
+                <select name="rType" id="rType">
+                    <option value="course">course</option>
+                    <option value="ebook">ebook</option>
+                    <option value="learning object">learning object</option>
+                </select>
+            </div>
+            <div>
+                <select name="status" id="status">
+                    <option value="Active">Active</option>
+                    <option value="New">New</option>
+                    <option value="Done">Done</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="container">
+        <button type="button" class="btn prevProjectData">Prev</button>
+        <button type="button" class="btn updateProjectData">Save Project</button>
+        <button type="button" class="btn nextProjectData">Next</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+             projectDetails() ;
+             loadmyProject() ;
+        });
+
+        function buildHTML() {
+            console.log("BUIDLING...");
+        }
+
+        function projectDetails() {
+            $(".prevProjectData").prop("disabled",true);
+            $(".nextProjectData").prop("disabled",true);
+        }
+
+        function loadmyProject() {
+            var sel = {
+                name: "test project"
+                , lessons: 200
+                , due: "2020-06-05"
+                , active: false
+            }
+            $("h2").text(sel.name);
+            $("input[name=lessons]").val(sel.lessons);
+            $("input[name=duedate]").val(sel.due);
+            if(sel.active){
+                $("#output").addClass("active");
+            }
+        }
+    </script>
+</body>
+
+</html>
